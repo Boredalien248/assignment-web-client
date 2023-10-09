@@ -18,3 +18,11 @@ examples thus some of the code is Copyright © 2001-2013 Python
 Software Foundation; All Rights Reserved under the PSF license (GPL
 compatible) http://docs.python.org/2/library/socketserver.html
 
+New Contributor / Licensing
+========================
+
+Now everything is LICENSE'D under the Apache 2 license by Kaustubh Mukherjee
+
+Made by myself without the contribution of others 
+
+RESOURCES REFERENCED : 
