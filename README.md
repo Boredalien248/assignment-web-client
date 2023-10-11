@@ -25,7 +25,8 @@ Now everything is LICENSE'D under the Apache 2 license by Kaustubh Mukherjee
 
 Made by myself without the contribution of others 
 
-RESOURCES REFERENCED : 
+RESOURCES REFERENCED
+========================
 
 URL Parsing - https://docs.python.org/3/library/urllib.parse.html  
 HTTP Codes - https://developer.mozilla.org/en-US/docs/Web/HTTP/Status  
