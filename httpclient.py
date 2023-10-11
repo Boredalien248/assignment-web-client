@@ -69,15 +69,26 @@ class HTTPClient(object):
 
     # read everything from the socket
     def recvall(self, sock):
-        buffer = bytearray()
-        done = False
+        # buffer = bytearray()
+        # done = False
+        # while not done:
+        #     part = sock.recv(1024)
+        #     if (part):
+        #         buffer.extend(part)
+        #     else:
+        #         done = not part
+        # return buffer.decode('utf-8')
+        
+        # goes through the the data received and gets every data from the response even if it crosses 1024 bytes 
+        the_response = ''
+        done = False 
         while not done:
-            part = sock.recv(1024)
-            if (part):
-                buffer.extend(part)
-            else:
-                done = not part
-        return buffer.decode('utf-8')
+            message = sock.recv(1024)
+            if len(message) <= 0:
+                done = True
+            the_response += message.decode("utf-8")
+        
+        return the_response
 
     def GET(self, url, args=None):
         code = 500
@@ -129,16 +140,16 @@ class HTTPClient(object):
         response = response.decode(FORMAT)
 
         # display the response 
-        print(response)
+        # print(response)
 
         # get the code and body into respective variables
         code = self.get_code(response)
-        # print(code)
-        # print('\n')
+        print(code)
+        print('\n')
 
         body = self.get_body(response)
-        # print(body)
-        # print('\n')
+        print(body)
+        print('\n')
 
         # close the connection
         self.close()
@@ -148,6 +159,67 @@ class HTTPClient(object):
     def POST(self, url, args=None):
         code = 500
         body = ""
+
+        # the formatting used 
+        FORMAT = 'utf-8'
+
+        # finding out the port, hostname and the scheme used in the request
+        port = urllib.parse.urlparse(url).port
+        host = urllib.parse.urlparse(url).hostname
+        scheme = urllib.parse.urlparse(url).scheme
+        path = urllib.parse.urlparse(url).path
+        query = urllib.parse.urlparse(url).query
+
+        # returning 400 error if port and host not mentioned 
+        if port is None and host is None:
+            return HTTPResponse(400, body)
+        
+        # setting default port if none mentioned or provided 
+        if port is None and scheme == 'https':
+            port = 443
+        if port is None and scheme == 'http':
+            port = 80
+
+        # connect to the server 
+        self.connect(host, port)
+
+        # if the path is empty then use \
+        if path is None: 
+            path = '/'
+
+        # if there is a query add it with the path 
+        if query is not None:
+            path += f'?{query}'
+
+        if args is not None:
+            args = urllib.parse.urlencode(args)
+        else:
+            args = ''
+            args = urllib.parse.urlencode(args)
+        
+        length_args = len(args)
+        
+        request = f'POST {path} HTTP/1.1\r\nHost:{host}\r\nContent-Type: application/x-www-form-urlencoded\r\nContent-Length: {length_args}\r\nConnection: close\r\n\r\n{args}\r\n\r\n'
+
+        # send the request 
+        self.sendall(request)
+
+        # receive all the data and store it in socket.
+        response = self.recvall(self.socket)
+        response = response.encode(FORMAT)
+        response = response.decode(FORMAT)
+
+        # display the response 
+        print(response)
+
+        # get the code and body into respective variables
+        code = self.get_code(response)
+        body = self.get_body(response)
+
+        # close the connection
+        self.close()
+
+
         return HTTPResponse(code, body)
 
     def command(self, url, command="GET", args=None):

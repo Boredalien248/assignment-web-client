@@ -31,3 +31,4 @@ URL Parsing - https://docs.python.org/3/library/urllib.parse.html
 HTTP Codes - https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
 Access Website without port number - https://stackoverflow.com/questions/54623320/how-to-use-domain-open-website-directly-without-port-number#:~:text=If%20you%20want%20to%20skip,443%20as%20per%20protocol%20use.
 Default Ports - https://www.examcollection.com/certification-training/network-plus-overview-of-common-tcp-and-udp-default-ports.html
+POST Format - https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods/POST
