@@ -104,6 +104,8 @@ class HTTPClient(object):
         scheme = urllib.parse.urlparse(url).scheme
         path = urllib.parse.urlparse(url).path
         query = urllib.parse.urlparse(url).query
+        print(scheme)
+        print(host)
 
         # returning 400 error if port and host not mentioned 
         if port is None and host is None:
@@ -115,22 +117,25 @@ class HTTPClient(object):
         if port is None and scheme == 'http':
             port = 80
 
+        # print(port)
         # print(path)
         
         # connect to the server 
         self.connect(host, port)
 
         # if the path is empty then use \
-        if path is None: 
+        if len(path) == 0: 
             path = '/'
 
         # if there is a query add it with the path 
-        if query is not None:
+        if query:
             path += f'?{query}'
 
         # fomatting the request
         request = f'GET {path} HTTP/1.1\r\nHost:{host}\r\nConnection: close\r\n\r\n'
-
+        # request = f'GET {path} HTTP/1.1\r\nHost:{host}\r\nConnection: close\r\n\r\n'
+        
+        print(request)
         # send the request 
         self.sendall(request)
 
@@ -185,15 +190,15 @@ class HTTPClient(object):
         self.connect(host, port)
 
         # if the path is empty then use \
-        if path is None: 
+        if len(path) == 0: 
             path = '/'
 
         # if there is a query add it with the path 
-        if query is not None:
+        if query:
             path += f'?{query}'
 
         # encoding args if present and encoding empty string if absent 
-        if args is not None:
+        if args:
             args = urllib.parse.urlencode(args)
         else:
             args = ''
