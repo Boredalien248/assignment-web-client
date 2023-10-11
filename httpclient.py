@@ -45,6 +45,7 @@ class HTTPClient(object):
     def get_code(self, data):
         # splits the whole response wherever there is a space and makes an array and provides the data in index 1 
         code = data.split(" ")
+        # print(code)
         return int(code[1])
 
     def get_headers(self,data):
@@ -78,7 +79,7 @@ class HTTPClient(object):
         #     else:
         #         done = not part
         # return buffer.decode('utf-8')
-        
+
         # goes through the the data received and gets every data from the response even if it crosses 1024 bytes 
         the_response = ''
         done = False 
@@ -140,16 +141,16 @@ class HTTPClient(object):
         response = response.decode(FORMAT)
 
         # display the response 
-        # print(response)
+        print(response)
 
         # get the code and body into respective variables
         code = self.get_code(response)
-        print(code)
-        print('\n')
+        # print(code)
+        # print('\n')
 
         body = self.get_body(response)
-        print(body)
-        print('\n')
+        # print(body)
+        # print('\n')
 
         # close the connection
         self.close()
@@ -191,14 +192,17 @@ class HTTPClient(object):
         if query is not None:
             path += f'?{query}'
 
+        # encoding args if present and encoding empty string if absent 
         if args is not None:
             args = urllib.parse.urlencode(args)
         else:
             args = ''
             args = urllib.parse.urlencode(args)
         
+        # saving the content length
         length_args = len(args)
         
+        # fomatting the request
         request = f'POST {path} HTTP/1.1\r\nHost:{host}\r\nContent-Type: application/x-www-form-urlencoded\r\nContent-Length: {length_args}\r\nConnection: close\r\n\r\n{args}\r\n\r\n'
 
         # send the request 
